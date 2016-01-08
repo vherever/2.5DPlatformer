@@ -11,6 +11,7 @@ public class Player : MonoBehaviour {
 	private bool secondJumpAvail = false; 
 
 	private Vector3 moveVector;
+	private Vector3 lastMotion;
 	private CharacterController controller;
 
 	// Use this for initialization
@@ -20,6 +21,7 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		moveVector = Vector3.zero;
 		inputDirection = Input.GetAxis("Horizontal") * speed;
 
 		if (controller.isGrounded) {
@@ -29,6 +31,7 @@ public class Player : MonoBehaviour {
 				verticalVelocity = 10;
 				secondJumpAvail = true;
 			}
+			moveVector.x = inputDirection;
 		} else {
 			if (Input.GetKeyDown (KeyCode.Space)) {
 				if(secondJumpAvail) {
@@ -37,9 +40,13 @@ public class Player : MonoBehaviour {
 				}
 			}
 			verticalVelocity -= gravity * Time.deltaTime;
+			moveVector.x = lastMotion.x;
 		}
 
-		moveVector = new Vector3 (inputDirection, verticalVelocity, 0);
+
+		moveVector.y = verticalVelocity;
+
 		controller.Move (moveVector * Time.deltaTime);
+		lastMotion = moveVector;
 	}
 }
