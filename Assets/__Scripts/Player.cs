@@ -8,6 +8,7 @@ public class Player : MonoBehaviour {
 
 	private float speed = 5.0f;
 	private float gravity = 30.0f;
+	private float jumpForce = 10.0f;
 	private bool secondJumpAvail = false; 
 
 	private Vector3 moveVector;
@@ -28,14 +29,14 @@ public class Player : MonoBehaviour {
 			verticalVelocity = 0;
 
 			if (Input.GetKeyDown (KeyCode.Space)) {
-				verticalVelocity = 10;
+				verticalVelocity = jumpForce;
 				secondJumpAvail = true;
 			}
 			moveVector.x = inputDirection;
 		} else {
 			if (Input.GetKeyDown (KeyCode.Space)) {
 				if(secondJumpAvail) {
-					verticalVelocity = 10;
+					verticalVelocity = jumpForce;
 					secondJumpAvail = false;
 				}
 			}
@@ -49,4 +50,16 @@ public class Player : MonoBehaviour {
 		controller.Move (moveVector * Time.deltaTime);
 		lastMotion = moveVector;
 	}
+
+	private void OnControllerColliderHit(ControllerColliderHit hit) {
+		if (controller.collisionFlags == CollisionFlags.Sides) {
+			if(Input.GetKeyDown(KeyCode.Space)) {
+				Debug.DrawRay(hit.point, hit.normal, Color.red, 2.0f);
+				moveVector = hit.normal * speed;
+				moveVector.y = jumpForce;
+				secondJumpAvail = true;
+			}
+		}
+	}
 }
+
