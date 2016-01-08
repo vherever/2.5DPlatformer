@@ -7,7 +7,8 @@ public class Player : MonoBehaviour {
 	private float verticalVelocity; // Y
 
 	private float speed = 5.0f;
-	private float gravity = 1.0f;
+	private float gravity = 30.0f;
+	private bool secondJumpAvail = false; 
 
 	private Vector3 moveVector;
 	private CharacterController controller;
@@ -23,8 +24,19 @@ public class Player : MonoBehaviour {
 
 		if (controller.isGrounded) {
 			verticalVelocity = 0;
+
+			if (Input.GetKeyDown (KeyCode.Space)) {
+				verticalVelocity = 10;
+				secondJumpAvail = true;
+			}
 		} else {
-			verticalVelocity -= gravity;
+			if (Input.GetKeyDown (KeyCode.Space)) {
+				if(secondJumpAvail) {
+					verticalVelocity = 10;
+					secondJumpAvail = false;
+				}
+			}
+			verticalVelocity -= gravity * Time.deltaTime;
 		}
 
 		moveVector = new Vector3 (inputDirection, verticalVelocity, 0);
