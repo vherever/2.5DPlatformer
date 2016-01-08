@@ -59,6 +59,15 @@ public class Player : MonoBehaviour {
 				moveVector.y = jumpForce;
 				secondJumpAvail = true;
 			}
+
+			//Collectibles
+			switch(hit.gameObject.tag) {
+			case "Coin":
+				Destroy(hit.gameObject);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }
