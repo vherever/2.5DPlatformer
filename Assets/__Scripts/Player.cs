@@ -65,11 +65,13 @@ public class Player : MonoBehaviour {
 		Debug.DrawRay (leftRayStart, Vector3.down, Color.red);
 		Debug.DrawRay (rightRayStart, Vector3.down, Color.blue);
 
-		if(Physics.Raycast (leftRayStart, Vector3.down, (controller.height / 2) + 0.2f))
+		if (Physics.Raycast (leftRayStart, Vector3.down, (controller.height / 2) + 0.2f)) 
+			return true;
+			
+
+		if (Physics.Raycast (rightRayStart, Vector3.down, (controller.height / 2) + 0.2f))
 			return true;
 
-		if(Physics.Raycast (rightRayStart, Vector3.down, (controller.height / 2) + 0.2f))
-			return true;
 
 		return false;
 	}
@@ -81,15 +83,17 @@ public class Player : MonoBehaviour {
 				moveVector = hit.normal * speed;
 				verticalVelocity = jumpForce;
 				secondJumpAvail = true;
-			}
+			}	
 
-			//Collectibles
+
+			//Collectible
 			switch(hit.gameObject.tag) {
-			case "Coin":
-				Destroy(hit.gameObject);
-				break;
-			default:
-				break;
+				case "Coin":
+					Debug.Log("coin pick");
+					Destroy(hit.gameObject);
+					break;
+				default:
+					break;
 			}
 		}
 	}
